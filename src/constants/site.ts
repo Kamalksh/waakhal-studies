@@ -1,14 +1,13 @@
-
 export type NavigationItem = {
     name: string;
     path: string;
 };
 
 export const SITE = {
-    name: "Heritage Lens",
-    title: "Training Minds for Caring Hands",
-    description: "An educational and research platform for cultural heritage.",
-    url: "https://heritage-lens-website.pages.dev",
+    name: "Waakhal Studies",
+    title: "Shaping Minds for Caring Hands",
+    description: "An educational and research platform by Yoombi Conservation Consultancy, exploring Art Conservation, Art History, Museology, Cultural Heritage Studies, Preventive Conservation, and Museum Studies.",
+    url: "https://waakhal-studies.pages.dev",
     defaultImage: "/default-og-image.jpg",
 } as const;
 
