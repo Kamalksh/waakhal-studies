@@ -1,0 +1,294 @@
+
+---
+import BaseLayout from "../components/layout/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+
+const topics = [
+  {
+    number: "01",
+    title: "Introduction to Conservation",
+    description: "Foundations, definitions, scope and the development of conservation as a discipline."
+  },
+  {
+    number: "02",
+    title: "History and Development",
+    description: "The evolution of conservation thought, approaches and professional practice."
+  },
+  {
+    number: "03",
+    title: "Ethics and Principles",
+    description: "Values, decision-making, minimum intervention, documentation and professional responsibility."
+  },
+  {
+    number: "04",
+    title: "Materials and Techniques",
+    description: "Understanding the materials, structures and techniques used in cultural objects."
+  },
+  {
+    number: "05",
+    title: "Agents of Deterioration",
+    description: "Physical, chemical, biological and environmental factors affecting cultural heritage."
+  },
+  {
+    number: "06",
+    title: "Preventive Conservation",
+    description: "Environmental management, collection care, risk assessment and preventive strategies."
+  },
+  {
+    number: "07",
+    title: "Examination and Analysis",
+    description: "Condition assessment, scientific examination and analytical methods in conservation."
+  },
+  {
+    number: "08",
+    title: "Conservation Treatments",
+    description: "Treatment approaches, materials, methodologies, retreatability and evaluation."
+  },
+  {
+    number: "09",
+    title: "Case Studies",
+    description: "Practical examples, conservation challenges, decisions and treatment outcomes."
+  },
+  {
+    number: "10",
+    title: "References and Further Reading",
+    description: "Books, research papers, professional guidelines and useful learning resources."
+  }
+];
+---
+
+<BaseLayout
+  title="Conservation | Heritage Lens"
+  description="Explore conservation principles, materials, deterioration, preventive conservation and professional practice."
+>
+  <Container>
+    <div class="conservation-page">
+
+      <section class="page-hero">
+        <p class="eyebrow">EXPLORE / CONSERVATION</p>
+        <h1>Conservation.</h1>
+        <p class="lead">
+          Understanding materials, investigating deterioration
+          and making informed decisions for the preservation
+          of cultural heritage.
+        </p>
+      </section>
+
+      <section class="introduction">
+        <div class="section-label">ABOUT THE DISCIPLINE</div>
+        <div class="intro-content">
+          <h2>Preservation begins with understanding.</h2>
+          <p>
+            Conservation is concerned with understanding, preserving
+            and caring for cultural heritage. It brings together
+            material knowledge, scientific investigation, historical
+            understanding and ethical decision-making.
+          </p>
+          <p>
+            Explore the principles and practices that guide
+            conservation, from understanding materials and their
+            deterioration to developing appropriate approaches
+            for their long-term care.
+          </p>
+        </div>
+      </section>
+
+      <section class="topics-section">
+        <div class="section-heading">
+          <span>01 / LEARNING MODULES</span>
+          <span>EXPLORE THE SUBJECT</span>
+        </div>
+
+        <div class="topics-list">
+          {topics.map((topic) => (
+            <article class="topic">
+              <span class="topic-number">{topic.number}</span>
+              <div class="topic-content">
+                <h3>{topic.title}</h3>
+                <p>{topic.description}</p>
+              </div>
+              <span class="topic-status">COMING SOON</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="learning-note">
+        <p class="eyebrow">LEARNING APPROACH</p>
+        <h2>Observe. Investigate. Evaluate. Decide.</h2>
+        <p>
+          Conservation requires more than technical knowledge.
+          It calls for careful observation, critical thinking,
+          ethical reflection and an understanding of the possible
+          consequences of every intervention.
+        </p>
+      </section>
+
+      <nav class="page-navigation" aria-label="Learning area navigation">
+        <a href="/explore/">← All learning areas</a>
+        <a href="/museology/">Next: Museology →</a>
+      </nav>
+
+    </div>
+  </Container>
+</BaseLayout>
+
+<style>
+  .conservation-page {
+    padding-top: 0.5rem;
+  }
+
+  .eyebrow,
+  .section-label,
+  .section-heading,
+  .topic-number,
+  .topic-status {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: #858585;
+  }
+
+  .page-hero {
+    max-width: 800px;
+    padding: 3rem 0 3.5rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(3rem, 7vw, 4.8rem);
+    font-weight: 400;
+    letter-spacing: -0.06em;
+    margin: 1.25rem 0;
+  }
+
+  .lead {
+    max-width: 650px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #777;
+  }
+
+  .introduction {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    padding: 2.75rem 0;
+    border-top: 1px solid #e8e8e8;
+  }
+
+  .intro-content {
+    max-width: 700px;
+  }
+
+  .intro-content h2,
+  .learning-note h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.25rem;
+  }
+
+  .intro-content p,
+  .learning-note > p:last-child {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #737373;
+    margin-bottom: 0.9rem;
+  }
+
+  .topics-section {
+    margin-top: 2rem;
+  }
+
+  .section-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .topic {
+    display: grid;
+    grid-template-columns: 45px 1fr auto;
+    gap: 1rem;
+    align-items: start;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .topic-number {
+    padding-top: 0.35rem;
+  }
+
+  .topic-content h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+  }
+
+  .topic-content p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #777;
+    margin-bottom: 0;
+  }
+
+  .topic-status {
+    font-size: 0.6rem;
+    white-space: nowrap;
+    padding-top: 0.4rem;
+  }
+
+  .learning-note {
+    max-width: 700px;
+    padding: 3rem 0;
+    margin-top: 1rem;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .learning-note h2 {
+    margin-top: 1rem;
+  }
+
+  .page-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 2rem 0;
+    font-size: 0.85rem;
+  }
+
+  .page-navigation a {
+    color: #647b69;
+  }
+
+  @media (max-width: 640px) {
+    .page-hero {
+      padding: 2.5rem 0 2.75rem;
+    }
+
+    .introduction {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 2.25rem 0;
+    }
+
+    .topic {
+      grid-template-columns: 30px 1fr;
+      gap: 0.75rem;
+    }
+
+    .topic-status {
+      grid-column: 2;
+    }
+
+    .section-heading {
+      font-size: 0.6rem;
+    }
+
+    .page-navigation {
+      font-size: 0.75rem;
+    }
+  }
+</style>
