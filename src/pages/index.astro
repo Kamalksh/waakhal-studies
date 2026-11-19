@@ -5,6 +5,8 @@ import Container from "../components/ui/Container.astro";
 
 import heroImage from "../assets/pexels-mikegles-30489757.jpg";
 import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.jpg";
+import museologyImage from "../assets/pexels-livi-soul-59228898-10232784.jpg";
+import artHistoryImage from "../assets/pexels-tarak-b-1084821-29396993.jpg";
 ---
 
 <BaseLayout
@@ -111,6 +113,7 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
           <span>KNOWLEDGE & PRACTICE</span>
         </div>
 
+        <!-- CONSERVATION -->
         <article
           class="study-card study-card-with-image"
           id="conservation"
@@ -135,7 +138,7 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
           <figure class="study-image">
             <img
               src={conservationImage.src}
-              alt="An artist working on a painting in a gallery setting"
+              alt="An artist working on a painting"
               loading="lazy"
             />
 
@@ -160,10 +163,14 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
           </figure>
         </article>
 
-        <article class="study-card" id="museology">
+        <!-- MUSEOLOGY -->
+        <article
+          class="study-card study-card-with-image"
+          id="museology"
+        >
           <span class="study-number">02</span>
 
-          <div>
+          <div class="study-content">
             <h2>Museology</h2>
 
             <p>
@@ -177,12 +184,43 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
               Learning resources coming soon
             </span>
           </div>
+
+          <figure class="study-image">
+            <img
+              src={museologyImage.src}
+              alt="A colourful traditional sculpted figure displayed in an architectural setting"
+              loading="lazy"
+            />
+
+            <figcaption>
+              Photograph by
+              <a
+                href="https://www.pexels.com/@livi-soul/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Livi Soul
+              </a>
+              ·
+              <a
+                href="https://www.pexels.com/photo/statue-of-god-10232784/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Pexels
+              </a>
+            </figcaption>
+          </figure>
         </article>
 
-        <article class="study-card" id="art-history">
+        <!-- ART HISTORY -->
+        <article
+          class="study-card study-card-with-image"
+          id="art-history"
+        >
           <span class="study-number">03</span>
 
-          <div>
+          <div class="study-content">
             <h2>Art History</h2>
 
             <p>
@@ -196,6 +234,33 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
               Learning resources coming soon
             </span>
           </div>
+
+          <figure class="study-image">
+            <img
+              src={artHistoryImage.src}
+              alt="A woman studying the intricate stone carvings of an ancient temple"
+              loading="lazy"
+            />
+
+            <figcaption>
+              Photograph by
+              <a
+                href="https://www.pexels.com/@tarak-b/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Tarak B
+              </a>
+              ·
+              <a
+                href="https://www.pexels.com/photo/ancient-temple-exploration-by-a-woman-29396993/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Pexels
+              </a>
+            </figcaption>
+          </figure>
         </article>
       </section>
 
