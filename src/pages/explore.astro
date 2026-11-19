@@ -1,0 +1,197 @@
+
+---
+import BaseLayout from "../components/layout/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+---
+
+<BaseLayout
+  title="Explore | Heritage Lens"
+  description="Explore learning and research in conservation, museology and art history."
+>
+  <Container>
+    <div class="explore-page">
+
+      <section class="page-hero">
+        <p class="eyebrow">EXPLORE / AREAS OF STUDY</p>
+        <h1>Explore the world of cultural heritage.</h1>
+        <p class="lead">
+          Three interconnected disciplines. Diverse perspectives.
+          A shared interest in understanding, interpreting and
+          preserving cultural heritage.
+        </p>
+      </section>
+
+      <section class="disciplines">
+
+        <a href="/conservation/" class="discipline">
+          <span class="discipline-number">01</span>
+          <div class="discipline-content">
+            <h2>Conservation</h2>
+            <p>
+              Explore the materials, principles, ethics and practices
+              involved in the preservation of cultural heritage.
+            </p>
+            <span class="discipline-link">Explore Conservation ↗</span>
+          </div>
+          <span class="discipline-arrow">↗</span>
+        </a>
+
+        <a href="/museology/" class="discipline">
+          <span class="discipline-number">02</span>
+          <div class="discipline-content">
+            <h2>Museology</h2>
+            <p>
+              Discover museums, collections, documentation,
+              interpretation and the evolving role of museums
+              in society.
+            </p>
+            <span class="discipline-link">Explore Museology ↗</span>
+          </div>
+          <span class="discipline-arrow">↗</span>
+        </a>
+
+        <a href="/art-history/" class="discipline">
+          <span class="discipline-number">03</span>
+          <div class="discipline-content">
+            <h2>Art History</h2>
+            <p>
+              Study artworks, artistic traditions, visual cultures
+              and the historical contexts that shape our
+              understanding of art.
+            </p>
+            <span class="discipline-link">Explore Art History ↗</span>
+          </div>
+          <span class="discipline-arrow">↗</span>
+        </a>
+
+      </section>
+
+      <section class="closing">
+        <p>
+          These disciplines do not exist in isolation.
+          Their connections create opportunities for broader
+          understanding, interdisciplinary research and
+          responsible engagement with cultural heritage.
+        </p>
+      </section>
+
+    </div>
+  </Container>
+</BaseLayout>
+
+<style>
+  .explore-page {
+    padding-top: 0.5rem;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: #858585;
+  }
+
+  .page-hero {
+    max-width: 800px;
+    padding: 3rem 0 3.5rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.2rem);
+    font-weight: 400;
+    letter-spacing: -0.06em;
+    line-height: 1.15;
+    margin: 1.25rem 0;
+  }
+
+  .lead {
+    max-width: 650px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #777;
+  }
+
+  .disciplines {
+    border-top: 1px solid #e8e8e8;
+  }
+
+  .discipline {
+    display: grid;
+    grid-template-columns: 60px 1fr 30px;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid #e8e8e8;
+    color: #242424;
+    text-decoration: none;
+    transition: background 0.25s ease;
+  }
+
+  .discipline-number {
+    padding-top: 0.5rem;
+    font-size: 0.75rem;
+    color: #999;
+  }
+
+  .discipline-content h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    margin-bottom: 0.75rem;
+    transition: color 0.25s ease;
+  }
+
+  .discipline-content p {
+    max-width: 600px;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #737373;
+    margin-bottom: 1rem;
+  }
+
+  .discipline-link {
+    font-size: 0.75rem;
+    color: #7a8f6a;
+    letter-spacing: 0.02em;
+  }
+
+  .discipline-arrow {
+    padding-top: 0.5rem;
+    color: #999;
+    transition: transform 0.25s ease;
+  }
+
+  .discipline:hover h2 {
+    color: #7a8f6a;
+  }
+
+  .discipline:hover .discipline-arrow {
+    transform: translate(3px, -3px);
+  }
+
+  .closing {
+    max-width: 700px;
+    padding: 3rem 0;
+  }
+
+  .closing p {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: #737373;
+  }
+
+  @media (max-width: 640px) {
+    .page-hero {
+      padding: 2.5rem 0 2.75rem;
+    }
+
+    .discipline {
+      grid-template-columns: 35px 1fr 20px;
+      gap: 0.75rem;
+      padding: 2rem 0;
+    }
+
+    .closing {
+      padding: 2.5rem 0;
+    }
+  }
+</style>
