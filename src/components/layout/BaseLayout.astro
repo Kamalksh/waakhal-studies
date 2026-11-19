@@ -58,11 +58,11 @@ const { title, description, image = "/default-og-image.jpg", canonicalURL = Astr
     <ClientRouter />
     <script is:inline>
       // Always use dark theme
-      document.documentElement.setAttribute("data-theme", "dark");
+      document.documentElement.setAttribute("data-theme", "light");
 
       // Handle theme persistence during view transitions
       document.addEventListener("astro:before-swap", (ev) => {
-        ev.newDocument.documentElement.setAttribute("data-theme", "dark");
+        ev.newDocument.documentElement.setAttribute("data-theme", "light");
       });
 
       // Add initial-load class
@@ -77,7 +77,7 @@ const { title, description, image = "/default-og-image.jpg", canonicalURL = Astr
     </script>
   </head>
   <body>
-    <div class="top-glow" transition:persist></div>
+    <div class="bottom-glow" transition:persist></div>
     <main>
       <div class="nav-container">
         <Navigation />
