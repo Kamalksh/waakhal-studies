@@ -15,12 +15,23 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
     <main>
       <!-- HERO -->
       <section class="hero">
-        <p class="eyebrow">AN EDUCATIONAL & RESEARCH PLATFORM</p>
-        <h1>Waakhal Studies.</h1>
-        <p class="tagline">Shaping Minds for Caring Hands.</p>
-        <p class="intro">
-          Explore. Learn. Understand.
-        </p>
+        <div class="hero-content">
+          <p class="eyebrow">AN EDUCATIONAL & RESEARCH PLATFORM</p>
+          <h1>Waakhal Studies.</h1>
+          <p class="tagline">Shaping Minds for Caring Hands.</p>
+          <p class="intro">Explore. Learn. Understand.</p>
+        </div>
+
+        <figure class="hero-image">
+          <img
+            src={heroImage.src}
+            alt="A museum visitor viewing a painting in an art gallery"
+            fetchpriority="high"
+          />
+          <figcaption>
+            Photograph: Miguel González / Pexels
+          </figcaption>
+        </figure>
       </section>
 
       <!-- INTRODUCTION -->
@@ -33,11 +44,11 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
           </h2>
           <p>
             Waakhal Studies is an educational and research platform
-            by Yoombi Conservation Consultancy, dedicated to the
-            study of cultural heritage. It brings together art
-            conservation, museology, art history and related fields
-            through accessible learning resources, research-based
-            knowledge and critical perspectives.
+            developed by Yoombi Conservation Consultancy,
+            dedicated to the study of cultural heritage. It brings
+            together art conservation, museology, art history and
+            related fields through accessible learning resources,
+            research-based knowledge and critical perspectives.
           </p>
           <p>
             Whether you are a student, researcher, museum professional
@@ -82,9 +93,9 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
           <span>KNOWLEDGE & PRACTICE</span>
         </div>
 
-        <article class="study-card" id="conservation">
+        <article class="study-card study-card-with-image" id="conservation">
           <span class="study-number">01</span>
-          <div>
+          <div class="study-content">
             <h2>Conservation</h2>
             <p>
               Explore the principles, ethics, materials and practices
@@ -94,6 +105,17 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
             </p>
             <span class="study-note">Learning resources coming soon</span>
           </div>
+
+          <figure class="study-image">
+            <img
+              src={conservationImage.src}
+              alt="An artist working on a painting in a gallery setting"
+              loading="lazy"
+            />
+            <figcaption>
+              Photograph: Almir Reis / Pexels
+            </figcaption>
+          </figure>
         </article>
 
         <article class="study-card" id="museology">
@@ -166,6 +188,10 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
     padding: 7rem 0 5rem;
   }
 
+  .hero-content {
+    margin-bottom: 2.5rem;
+  }
+
   .eyebrow,
   .intro-label,
   .section-heading,
@@ -192,6 +218,25 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
     margin-top: 1.5rem;
     color: #888;
     font-size: 0.9rem;
+  }
+
+  .hero-image {
+    margin: 0;
+  }
+
+  .hero-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    object-fit: cover;
+    object-position: center 48%;
+  }
+
+  figure figcaption {
+    margin-top: 0.6rem;
+    color: #999;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
   }
 
   .introduction {
@@ -293,6 +338,23 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
     max-width: 650px;
   }
 
+  .study-card-with-image {
+    grid-template-columns: 60px minmax(0, 1fr) minmax(220px, 0.75fr);
+    align-items: start;
+  }
+
+  .study-image {
+    margin: 0;
+  }
+
+  .study-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center;
+  }
+
   .study-note {
     display: inline-block;
     margin-top: 0.5rem;
@@ -346,9 +408,25 @@ import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.j
     font-weight: 500;
   }
 
+  @media (max-width: 768px) {
+    .study-card-with-image {
+      grid-template-columns: 35px 1fr;
+    }
+
+    .study-image {
+      grid-column: 2;
+      max-width: 420px;
+      margin-top: 1rem;
+    }
+  }
+
   @media (max-width: 640px) {
     .hero {
       padding-top: 4rem;
+    }
+
+    .hero-image img {
+      aspect-ratio: 4 / 3;
     }
 
     .introduction {
