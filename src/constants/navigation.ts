@@ -8,10 +8,10 @@ export const NAVIGATION: Navigation = [
     },
     {
         name: "About",
-        path: "/#about",
+        path: "/about/",
     },
     {
         name: "Explore",
-        path: "/#explore",
+        path: "/explore/",
     },
 ];
