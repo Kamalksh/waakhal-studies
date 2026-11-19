@@ -1,5 +1,8 @@
+
 ---
 import { NAVIGATION } from "../../constants/navigation";
+import { SITE } from "../../constants/site";
+
 const pathname = new URL(Astro.request.url).pathname;
 
 const isActive = (path: string) => {
@@ -18,16 +21,21 @@ const isActive = (path: string) => {
       ))
     }
   </div>
+
+  <a href="/" class="brand">{SITE.name}</a>
 </nav>
 
 <style>
   nav {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .nav-links {
     display: flex;
+    align-items: center;
     gap: 1.5rem;
   }
 
@@ -35,33 +43,43 @@ const isActive = (path: string) => {
     color: var(--text-muted);
     text-decoration: none;
     font-size: var(--text-sm);
-    transition: color var(--transition-base);
     position: relative;
   }
 
-  a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: var(--text-sm);
-    transition: color var(--transition-base);
-    position: relative;
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--text-color);
   }
 
-  a:hover {
-    color: var(--color-text);
-  }
-
-  a.active {
-    color: var(--color-text) !important;
-  }
-
-  a.active::after {
+  .nav-links a.active::after {
     content: "";
     position: absolute;
-    bottom: -2px;
+    bottom: -5px;
     left: 0;
     width: 100%;
     height: 1px;
     background: var(--text-muted);
+  }
+
+  .brand {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 480px) {
+    .nav-links {
+      gap: 0.8rem;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+    }
+
+    .brand {
+      font-size: 0.8rem;
+    }
   }
 </style>
