@@ -1,3 +1,4 @@
+
 import type { Navigation } from "../types/navigation";
 
 export const NAVIGATION: Navigation = [
@@ -6,15 +7,11 @@ export const NAVIGATION: Navigation = [
         path: "/",
     },
     {
-        name: "Blog",
-        path: "/blog",
+        name: "About",
+        path: "/#about",
     },
     {
-        name: "Notes",
-        path: "/notes",
+        name: "Explore",
+        path: "/#explore",
     },
-    {
-        name: "Bookmarks",
-        path: "/bookmarks",
-    },
-]; 
+];
