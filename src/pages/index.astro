@@ -52,8 +52,15 @@ import Container from "../components/ui/Container.astro";
     </section>
 
     <footer>
-      <span>HERITAGE LENS</span>
-      <span>Training Eyes for Caring Hands.</span>
+      <div class="footer-brand">
+        <span>HERITAGE LENS</span>
+        <span>Training Minds for Caring Hands.</span>
+      </div>
+
+      <div class="footer-credit">
+        <span>AN INITIATIVE BY</span>
+        <strong>Yoombi Conservation Consultancy</strong>
+      </div>
     </footer>
   </Container>
 </BaseLayout>
@@ -126,17 +133,49 @@ import Container from "../components/ui/Container.astro";
     border-bottom: 1px solid #eeeeee;
     color: #242424;
     font-size: 1.15rem;
+    text-decoration: none;
+  }
+
+  .explore-item:hover {
+    color: #647b69;
   }
 
   footer {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    align-items: flex-end;
+    gap: 2rem;
     border-top: 1px solid #eeeeee;
-    padding: 2rem 0;
+    padding: 2.5rem 0;
     margin-top: 5rem;
     color: #888888;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+  }
+
+  .footer-brand,
+  .footer-credit {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer-brand span:first-child {
+    color: #555555;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-credit {
+    text-align: right;
+  }
+
+  .footer-credit span {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+  }
+
+  .footer-credit strong {
+    color: #555555;
+    font-weight: 500;
   }
 
   @media (max-width: 640px) {
@@ -150,6 +189,11 @@ import Container from "../components/ui/Container.astro";
 
     footer {
       flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .footer-credit {
+      text-align: left;
     }
   }
 </style>
