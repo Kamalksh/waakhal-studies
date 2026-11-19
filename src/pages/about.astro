@@ -1,0 +1,252 @@
+
+---
+import BaseLayout from "../components/layout/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+---
+
+<BaseLayout
+  title="About | Heritage Lens"
+  description="Learn about Heritage Lens, an educational and research platform for cultural heritage."
+>
+  <Container>
+    <main class="about-page">
+
+      <section class="page-hero">
+        <p class="eyebrow">ABOUT THE PLATFORM</p>
+        <h1>A space for learning, inquiry and understanding.</h1>
+        <p class="lead">
+          Bringing together knowledge, research and practice
+          in the study of cultural heritage.
+        </p>
+      </section>
+
+      <section class="content-section">
+        <div class="section-label">01 / WHO WE ARE</div>
+
+        <div class="section-content">
+          <h2>Learning through different perspectives.</h2>
+          <p>
+            Heritage Lens is an educational and research platform
+            dedicated to the study of cultural heritage. It brings
+            together diverse areas of knowledge to encourage a deeper
+            understanding of the objects, collections, institutions
+            and histories that shape our cultural world.
+          </p>
+          <p>
+            The platform aims to make knowledge accessible to students,
+            researchers, educators and heritage professionals through
+            learning resources, research-based content and opportunities
+            for continued exploration.
+          </p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <div class="section-label">02 / OUR PURPOSE</div>
+
+        <div class="section-content">
+          <h2>Building foundations for informed practice.</h2>
+          <p>
+            Understanding cultural heritage requires more than
+            theoretical knowledge. It involves observation, critical
+            thinking, ethical reflection and an appreciation of
+            materials, histories and cultural contexts.
+          </p>
+          <p>
+            Our purpose is to encourage thoughtful learning and
+            responsible engagement with cultural heritage.
+          </p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <div class="section-label">03 / OUR AREAS</div>
+
+        <div class="section-content">
+          <h2>Three interconnected fields of study.</h2>
+
+          <div class="areas-list">
+            <div class="area">
+              <span>01</span>
+              <div>
+                <h3>Conservation</h3>
+                <p>
+                  Materials, deterioration, preservation,
+                  conservation ethics and practice.
+                </p>
+              </div>
+            </div>
+
+            <div class="area">
+              <span>02</span>
+              <div>
+                <h3>Museology</h3>
+                <p>
+                  Museums, collections, documentation,
+                  interpretation and museum practice.
+                </p>
+              </div>
+            </div>
+
+            <div class="area">
+              <span>03</span>
+              <div>
+                <h3>Art History</h3>
+                <p>
+                  Artworks, visual cultures, historical
+                  contexts and artistic traditions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <div class="section-label">04 / OUR APPROACH</div>
+
+        <div class="section-content">
+          <h2>Question. Observe. Understand.</h2>
+          <p>
+            We believe that meaningful learning begins with curiosity
+            and develops through careful observation, questioning
+            and critical engagement.
+          </p>
+          <p>
+            Rather than simply presenting information, we aim to
+            encourage learners to examine ideas, consider different
+            perspectives and connect knowledge with real-world
+            contexts.
+          </p>
+        </div>
+      </section>
+
+      <section class="platform-credit">
+        <p class="eyebrow">AN INITIATIVE BY</p>
+        <h2>Yoombi Conservation Consultancy</h2>
+        <p>
+          Supporting education, research and knowledge exchange
+          in cultural heritage.
+        </p>
+      </section>
+
+    </main>
+  </Container>
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding-top: 2rem;
+  }
+
+  .eyebrow,
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: #858585;
+  }
+
+  .page-hero {
+    padding: 5rem 0 6rem;
+    max-width: 800px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.2rem);
+    font-weight: 400;
+    letter-spacing: -0.06em;
+    line-height: 1.15;
+    margin: 1.5rem 0;
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #777;
+    max-width: 620px;
+  }
+
+  .content-section {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    padding: 4rem 0;
+    border-top: 1px solid #e8e8e8;
+  }
+
+  .section-content {
+    max-width: 700px;
+  }
+
+  .section-content h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-content p {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: #737373;
+    margin-bottom: 1rem;
+  }
+
+  .areas-list {
+    margin-top: 2rem;
+  }
+
+  .area {
+    display: grid;
+    grid-template-columns: 45px 1fr;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .area > span {
+    font-size: 0.75rem;
+    color: #999;
+    padding-top: 0.3rem;
+  }
+
+  .area h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+  }
+
+  .area p {
+    margin: 0;
+  }
+
+  .platform-credit {
+    border-top: 1px solid #e8e8e8;
+    padding: 4rem 0;
+    margin-top: 2rem;
+  }
+
+  .platform-credit h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 1rem 0 0.5rem;
+  }
+
+  .platform-credit > p:last-child {
+    color: #777;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 640px) {
+    .page-hero {
+      padding: 4rem 0;
+    }
+
+    .content-section {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 3rem 0;
+    }
+  }
+</style>
