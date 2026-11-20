@@ -7,6 +7,7 @@ import heroImage from "../assets/pexels-mikegles-30489757.jpg";
 import conservationImage from "../assets/pexels-almir-reis-1982745319-29044862.jpg";
 import museologyImage from "../assets/pexels-livi-soul-59228898-10232784.jpg";
 import artHistoryImage from "../assets/pexels-tarak-b-1084821-29396993.jpg";
+import learningImage from "../assets/pexels-kosyginl-34293083.jpg";
 ---
 
 <BaseLayout
@@ -287,20 +288,51 @@ import artHistoryImage from "../assets/pexels-tarak-b-1084821-29396993.jpg";
           <span>03 / OUR APPROACH</span>
         </div>
 
-        <h2>Learning beyond information.</h2>
+        <div class="learning-grid">
+          <div class="learning-content">
+            <h2>Learning beyond information.</h2>
 
-        <p>
-          We believe meaningful learning comes from observation,
-          questioning, critical thinking and the ability to connect
-          knowledge with practice.
-        </p>
+            <p>
+              We believe meaningful learning comes from observation,
+              questioning, critical thinking and the ability to connect
+              knowledge with practice.
+            </p>
 
-        <p>
-          The platform will bring together learning materials,
-          research references, study resources and interactive
-          learning experiences to encourage independent thinking
-          and continued exploration.
-        </p>
+            <p>
+              The platform will bring together learning materials,
+              research references, study resources and interactive
+              learning experiences to encourage independent thinking
+              and continued exploration.
+            </p>
+          </div>
+
+          <figure class="learning-image">
+            <img
+              src={learningImage.src}
+              alt="Performers presenting a traditional dance in ornate costumes"
+              loading="lazy"
+            />
+
+            <figcaption>
+              Photograph by
+              <a
+                href="https://www.pexels.com/@kosyginl/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Kosygin Leishangthem
+              </a>
+              ·
+              <a
+                href="https://www.pexels.com/photo/34293083/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Pexels
+              </a>
+            </figcaption>
+          </figure>
+        </div>
       </section>
 
       <!-- FOOTER -->
@@ -537,12 +569,54 @@ import artHistoryImage from "../assets/pexels-tarak-b-1084821-29396993.jpg";
   /* LEARNING APPROACH */
 
   .learning {
-    max-width: 700px;
     padding: 2rem 0;
   }
 
+  .learning-grid {
+    display: grid;
+    grid-template-columns: 1fr 0.85fr;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 2.5rem;
+  }
+
+  .learning-content {
+    max-width: 600px;
+  }
+
   .learning h2 {
-    margin-top: 2rem;
+    margin-top: 0;
+  }
+
+  .learning-image {
+    margin: 0;
+  }
+
+  .learning-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .learning-image figcaption {
+    margin-top: 0.6rem;
+    color: #999;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+  }
+
+  .learning-image figcaption a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: #d0d0d0;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+  }
+
+  .learning-image figcaption a:hover {
+    color: #7a8f6a;
   }
 
   /* FOOTER */
@@ -588,6 +662,15 @@ import artHistoryImage from "../assets/pexels-tarak-b-1084821-29396993.jpg";
   /* TABLET */
 
   @media (max-width: 768px) {
+    .learning-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .learning-image {
+      max-width: 480px;
+    }
+
     .study-card-with-image {
       grid-template-columns: 35px 1fr;
     }
