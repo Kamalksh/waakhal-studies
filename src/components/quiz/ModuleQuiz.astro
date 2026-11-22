@@ -348,4 +348,866 @@ const moduleId = "conservation-module-01";
       section: "05 – Making conservation decisions",
       difficulty: "Application"
     }
-  ];
+  ];  const root = document.querySelector<HTMLElement>(".module-quiz");
+
+  if (root) {
+    const form = root.querySelector<HTMLFormElement>("[data-quiz-form]");
+    const questionContainer = root.querySelector<HTMLElement>("[data-questions]");
+    const progressText = root.querySelector<HTMLElement>("[data-progress-text]");
+    const progressBar = root.querySelector<HTMLElement>("[data-progress-bar]");
+    const progressTrack = root.querySelector<HTMLElement>("[data-progress-track]");
+    const submitButton = root.querySelector<HTMLButtonElement>("[data-submit]");
+    const results = root.querySelector<HTMLElement>("[data-results]");
+
+    // Versioned key starts a clean cycle with this revised 20-question bank.
+    // It also prevents old attempts from the earlier 10-question version
+    // from interfering with the new balanced question selection.
+    const storageKey = `waakhal-quiz-${root.dataset.moduleId}-attempted-v2`;
+
+    if (
+      form &&
+      questionContainer &&
+      progressText &&
+      progressBar &&
+      progressTrack &&
+      submitButton &&
+      results
+    ) {
+      const targetCounts: Record<QuizQuestion["difficulty"], number> = {
+        Basic: 4,
+        Intermediate: 4,
+        Application: 2
+      };
+
+      const shuffle = <T,>(items: T[]): T[] => {
+        const copy = [...items];
+
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+
+        return copy;
+      };
+
+      let attemptedIds: string[] = [];
+
+      try {
+        const saved = localStorage.getItem(storageKey);
+        const parsed = saved ? JSON.parse(saved) : [];
+
+        if (Array.isArray(parsed)) {
+          const validIds = new Set(QUESTION_BANK.map(question => question.id));
+          attemptedIds = [...new Set(
+            parsed.filter((id): id is string =>
+              typeof id === "string" && validIds.has(id)
+            )
+          )];
+        }
+      } catch {
+        attemptedIds = [];
+      }
+
+      const available = QUESTION_BANK.filter(
+        question => !attemptedIds.includes(question.id)
+      );
+
+      const escapeHtml = (value: string) =>
+        value.replace(/[&<>"']/g, char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        })[char] || char);
+
+      const startFreshCycle = () => {
+        try {
+          localStorage.removeItem(storageKey);
+        } catch {
+          // The page can still reload if browser storage is unavailable.
+        }
+
+        window.location.reload();
+      };
+
+      const continueToNextSet = () => {
+        window.location.reload();
+      };
+
+      if (available.length === 0) {
+        progressText.textContent = "All 20 questions attempted.";
+        progressBar.style.width = "100%";
+        progressTrack.setAttribute("aria-valuenow", "10");
+
+        questionContainer.innerHTML = `
+          <div class="quiz-exhausted">
+            <p class="quiz-eyebrow">QUESTION BANK COMPLETED</p>
+            <h3>You've completed all 20 questions.</h3>
+            <p>
+              You have attempted every question in this lesson's question bank.
+              Your next attempt will begin a fresh cycle.
+            </p>
+            <p>
+              Questions may appear again, in a new random order.
+            </p>
+            <button type="button" class="quiz-retake" data-retake>
+              Start a fresh cycle <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        `;
+
+        submitButton.hidden = true;
+
+        questionContainer
+          .querySelector<HTMLButtonElement>("[data-retake]")
+          ?.addEventListener("click", startFreshCycle);
+      } else {
+        // Select 4 Basic, 4 Intermediate and 2 Application questions.
+        // With a fresh 20-question bank, the remaining pool after attempt 1
+        // contains exactly the same 4/4/2 distribution for attempt 2.
+        const selected: QuizQuestion[] = [];
+        const selectedIds = new Set<string>();
+
+        (Object.keys(targetCounts) as QuizQuestion["difficulty"][]).forEach(
+          difficulty => {
+            const pool = shuffle(
+              available.filter(question => question.difficulty === difficulty)
+            );
+
+            const chosen = pool.slice(0, targetCounts[difficulty]);
+
+            chosen.forEach(question => {
+              selected.push(question);
+              selectedIds.add(question.id);
+            });
+          }
+        );
+
+        // Defensive fallback in case stored data is incomplete or altered.
+        // Under the normal two-attempt cycle this fallback is not needed.
+        if (selected.length < Math.min(10, available.length)) {
+          const remainingPool = shuffle(
+            available.filter(question => !selectedIds.has(question.id))
+          );
+
+          const needed = Math.min(10, available.length) - selected.length;
+          selected.push(...remainingPool.slice(0, needed));
+        }
+
+        const finalQuestions = shuffle(selected);
+
+        progressText.textContent =
+          `0 of ${finalQuestions.length} answered`;
+
+        questionContainer.innerHTML = finalQuestions.map((q, index) => `
+          <fieldset class="quiz-question-card">
+            <legend class="quiz-question-heading">
+              <span class="quiz-question-number">
+                QUESTION ${String(index + 1).padStart(2, "0")}
+              </span>
+              <span class="quiz-difficulty difficulty-${q.difficulty.toLowerCase()}">
+                ${q.difficulty}
+              </span>
+            </legend>
+
+            <p class="quiz-question-text">
+              ${escapeHtml(q.question)}
+            </p>
+
+            <div class="quiz-options">
+              ${q.options.map((option, optionIndex) => `
+                <label class="quiz-option">
+                  <input
+                    type="radio"
+                    name="${q.id}"
+                    value="${optionIndex}"
+                    required
+                  >
+                  <span class="option-letter">
+                    ${String.fromCharCode(65 + optionIndex)}
+                  </span>
+                  <span class="option-text">
+                    ${escapeHtml(option)}
+                  </span>
+                </label>
+              `).join("")}
+            </div>
+          </fieldset>
+        `).join("");
+
+        const updateProgress = () => {
+          const answered = finalQuestions.filter(question =>
+            form.querySelector<HTMLInputElement>(
+              `input[name="${question.id}"]:checked`
+            )
+          ).length;
+
+          const percentage = (answered / finalQuestions.length) * 100;
+
+          progressText.textContent =
+            `${answered} of ${finalQuestions.length} answered`;
+
+          progressBar.style.width = `${percentage}%`;
+          progressTrack.setAttribute("aria-valuenow", String(answered));
+        };
+
+        questionContainer.addEventListener("change", updateProgress);
+        submitButton.disabled = false;
+
+        form.addEventListener("submit", event => {
+          event.preventDefault();
+
+          if (submitButton.disabled) return;
+
+          const unanswered = finalQuestions.filter(question =>
+            !form.querySelector<HTMLInputElement>(
+              `input[name="${question.id}"]:checked`
+            )
+          );
+
+          if (unanswered.length) {
+            const firstUnanswered = form.querySelector<HTMLInputElement>(
+              `input[name="${unanswered[0].id}"]`
+            );
+
+            firstUnanswered?.focus();
+
+            progressText.textContent =
+              `Please answer all ${finalQuestions.length} questions before submitting.`;
+
+            return;
+          }
+
+          let score = 0;
+
+          const answerDetails = finalQuestions.map((question, index) => {
+            const chosen = form.querySelector<HTMLInputElement>(
+              `input[name="${question.id}"]:checked`
+            );
+
+            const chosenIndex = chosen ? Number(chosen.value) : -1;
+            const correct = chosenIndex === question.answer;
+
+            if (correct) score++;
+
+            return { question, index, chosenIndex, correct };
+          });
+
+          // Every submitted question is recorded, including incorrect answers.
+          attemptedIds = [
+            ...new Set([
+              ...attemptedIds,
+              ...finalQuestions.map(question => question.id)
+            ])
+          ];
+
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(attemptedIds));
+          } catch {
+            // Scoring and review still work if browser storage is unavailable.
+          }
+
+          const remainingCount = QUESTION_BANK.length - attemptedIds.length;
+          const percentage = Math.round(
+            (score / finalQuestions.length) * 100
+          );
+
+          const feedback = score >= 9
+            ? "Excellent understanding."
+            : score >= 7
+              ? "Good work. Review the explanations to strengthen your understanding."
+              : score >= 5
+                ? "You're developing your understanding. Revisit the relevant lesson sections."
+                : "Consider revisiting the chapter before your next attempt.";
+
+          const nextStepMarkup = remainingCount > 0
+            ? `
+              <p class="quiz-bank-progress">
+                ${attemptedIds.length} of ${QUESTION_BANK.length} questions attempted.
+                ${remainingCount} questions remain in the question bank.
+              </p>
+              <p class="quiz-next-note">
+                Your next set will contain the remaining questions.
+                Questions from this attempt will not be repeated.
+              </p>
+              <button type="button" class="quiz-retake" data-next-set>
+                Continue to next set <span aria-hidden="true">→</span>
+              </button>
+            `
+            : `
+              <p class="quiz-bank-progress">
+                You have now attempted all ${QUESTION_BANK.length} questions.
+              </p>
+              <p class="quiz-next-note">
+                You have completed the full question bank. You may now begin
+                a fresh cycle; questions may repeat.
+              </p>
+              <button type="button" class="quiz-retake" data-retake>
+                Start a fresh cycle <span aria-hidden="true">→</span>
+              </button>
+            `;
+
+          results.hidden = false;
+
+          results.innerHTML = `
+            <div class="result-summary">
+              <p class="quiz-eyebrow">YOUR RESULT</p>
+
+              <div class="result-score">
+                <span class="score-number">${score}</span>
+                <span class="score-total">/ ${finalQuestions.length}</span>
+              </div>
+
+              <p class="result-percentage">${percentage}% correct</p>
+              <h3>${feedback}</h3>
+              <p class="result-message">
+                You answered ${score} of ${finalQuestions.length} questions correctly.
+              </p>
+            </div>
+
+            <div class="result-review">
+              <div class="review-heading">
+                <h3>Review your answers</h3>
+                <p>Understand the reasoning behind each answer.</p>
+              </div>
+
+              ${answerDetails.map(({ question, index, chosenIndex, correct }) => `
+                <article class="review-card">
+                  <div class="review-card-top">
+                    <span class="review-question-number">
+                      QUESTION ${String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span class="review-status ${correct ? "correct" : "incorrect"}">
+                      ${correct ? "Correct" : "Incorrect"}
+                    </span>
+                  </div>
+
+                  <h4>${escapeHtml(question.question)}</h4>
+
+                  <p class="review-answer">
+                    <strong>Your answer:</strong>
+                    ${escapeHtml(question.options[chosenIndex])}
+                  </p>
+
+                  ${correct ? "" : `
+                    <p class="review-answer correct-answer">
+                      <strong>Correct answer:</strong>
+                      ${escapeHtml(question.options[question.answer])}
+                    </p>
+                  `}
+
+                  <div class="review-explanation">
+                    <span>EXPLANATION</span>
+                    <p>${escapeHtml(question.explanation)}</p>
+                  </div>
+
+                  <p class="review-reference">
+                    Lesson reference: ${escapeHtml(question.section)}
+                  </p>
+                </article>
+              `).join("")}
+            </div>
+
+            ${nextStepMarkup}
+          `;
+
+          form.querySelectorAll<HTMLInputElement>("input").forEach(input => {
+            input.disabled = true;
+          });
+
+          submitButton.disabled = true;
+          submitButton.textContent = "Attempt submitted";
+
+          progressText.textContent = "Attempt completed.";
+          progressBar.style.width = "100%";
+          progressTrack.setAttribute("aria-valuenow", "10");
+
+          results
+            .querySelector<HTMLButtonElement>("[data-next-set]")
+            ?.addEventListener("click", continueToNextSet);
+
+          results
+            .querySelector<HTMLButtonElement>("[data-retake]")
+            ?.addEventListener("click", startFreshCycle);
+
+          results.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        });
+      }
+    }
+  }
+</script><style is:global>
+  .module-quiz {
+    width: 100%;
+    padding: 3rem 0 3.5rem;
+    margin: 0 0 3rem;
+    border-bottom: 1px solid #e8e8e8;
+    scroll-margin-top: 2rem;
+    color: #292929;
+  }
+
+  .module-quiz *,
+  .module-quiz *::before,
+  .module-quiz *::after {
+    box-sizing: border-box;
+  }
+
+  .module-quiz .quiz-heading {
+    max-width: 760px;
+    margin-bottom: 2.5rem;
+  }
+
+  .module-quiz .quiz-eyebrow {
+    color: #858585;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    margin: 0 0 1rem;
+  }
+
+  .module-quiz .quiz-heading h2 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 400;
+    letter-spacing: -0.045em;
+    line-height: 1.2;
+    margin: 0 0 1rem;
+  }
+
+  .module-quiz .quiz-intro {
+    max-width: 680px;
+    color: #777;
+    font-size: 0.98rem;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .module-quiz .quiz-progress-area {
+    padding: 1.2rem 0 1.5rem;
+    margin-bottom: 1.5rem;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .module-quiz .quiz-progress-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: #777;
+    font-size: 0.85rem;
+  }
+
+  .module-quiz .progress-label {
+    color: #858585;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  .module-quiz .progress-track {
+    width: 100%;
+    height: 5px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #eeeeeb;
+  }
+
+  .module-quiz .progress-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 20px;
+    background: #718875;
+    transition: width 0.25s ease;
+  }
+
+  .module-quiz .quiz-questions {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .module-quiz .quiz-question-card {
+    display: block;
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+    padding: 1.5rem;
+    border: 1px solid #e8e8e8;
+    border-radius: 7px;
+    background: #fff;
+  }
+
+  .module-quiz .quiz-question-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 0;
+    margin: 0 0 1rem;
+    border: 0;
+  }
+
+  .module-quiz .quiz-question-number {
+    color: #858585;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+  }
+
+  .module-quiz .quiz-difficulty {
+    padding: 0.3rem 0.55rem;
+    border-radius: 3px;
+    background: #f3f4f1;
+    color: #687568;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+
+  .module-quiz .difficulty-application {
+    background: #f5f1e9;
+    color: #927648;
+  }
+
+  .module-quiz .quiz-question-text {
+    color: #292929;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.65;
+    margin: 0 0 1.2rem;
+  }
+
+  .module-quiz .quiz-options {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .module-quiz .quiz-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid #e9e9e7;
+    border-radius: 5px;
+    background: #fff;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+
+  .module-quiz .quiz-option:hover {
+    border-color: #a5b2a1;
+    background: #fafbf9;
+  }
+
+  .module-quiz .quiz-option:has(input:checked) {
+    border-color: #718875;
+    background: #f5f7f4;
+    color: #303830;
+  }
+
+  .module-quiz .quiz-option input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .module-quiz .quiz-option:has(input:focus-visible) {
+    outline: 2px solid #718875;
+    outline-offset: 3px;
+  }
+
+  .module-quiz .option-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 25px;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #dededb;
+    border-radius: 50%;
+    color: #777;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .module-quiz .quiz-option:has(input:checked) .option-letter {
+    border-color: #718875;
+    background: #718875;
+    color: #fff;
+  }
+
+  .module-quiz .option-text {
+    flex: 1;
+  }
+
+  .module-quiz .quiz-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1.8rem;
+  }
+
+  .module-quiz .quiz-footer p {
+    color: #888;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .module-quiz .quiz-submit {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.4rem;
+    border: 0;
+    border-radius: 4px;
+    background: #647b69;
+    color: #fff;
+    font: inherit;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .module-quiz .quiz-submit:hover:not(:disabled) {
+    background: #506554;
+  }
+
+  .module-quiz .quiz-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .module-quiz .quiz-results {
+    margin-top: 2.5rem;
+    scroll-margin-top: 2rem;
+  }
+
+  .module-quiz .result-summary {
+    padding: 2rem;
+    border: 1px solid #e8e8e8;
+    border-radius: 7px;
+    background: #f8f9f7;
+  }
+
+  .module-quiz .result-score {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    margin: 0.5rem 0;
+  }
+
+  .module-quiz .score-number {
+    color: #303830;
+    font-size: 4rem;
+    letter-spacing: -0.07em;
+    line-height: 1;
+  }
+
+  .module-quiz .score-total {
+    color: #858585;
+    font-size: 1.4rem;
+  }
+
+  .module-quiz .result-percentage {
+    color: #647b69;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .module-quiz .result-summary h3 {
+    margin: 1.2rem 0 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 500;
+  }
+
+  .module-quiz .result-message {
+    margin: 0;
+    color: #777;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .module-quiz .result-review {
+    margin-top: 2.5rem;
+  }
+
+  .module-quiz .review-heading {
+    margin-bottom: 1.2rem;
+  }
+
+  .module-quiz .review-heading h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  .module-quiz .review-heading p {
+    margin: 0;
+    color: #858585;
+    font-size: 0.88rem;
+  }
+
+  .module-quiz .review-card {
+    padding: 1.4rem 0;
+    border-top: 1px solid #e8e8e8;
+  }
+
+  .module-quiz .review-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .module-quiz .review-question-number {
+    color: #858585;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+  }
+
+  .module-quiz .review-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .module-quiz .review-status.correct {
+    color: #547b5b;
+  }
+
+  .module-quiz .review-status.incorrect {
+    color: #a45a4f;
+  }
+
+  .module-quiz .review-card h4 {
+    margin: 0 0 0.9rem;
+    color: #292929;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .module-quiz .review-answer {
+    margin: 0.5rem 0;
+    color: #707070;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .module-quiz .correct-answer {
+    color: #547b5b;
+  }
+
+  .module-quiz .review-explanation {
+    padding: 1rem;
+    margin-top: 1rem;
+    border-left: 3px solid #9aaa94;
+    background: #f7f8f6;
+  }
+
+  .module-quiz .review-explanation > span {
+    color: #858585;
+    font-size: 0.67rem;
+    letter-spacing: 0.1em;
+  }
+
+  .module-quiz .review-explanation p {
+    margin: 0.5rem 0 0;
+    color: #666;
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  .module-quiz .review-reference,
+  .module-quiz .quiz-bank-progress {
+    margin: 0.8rem 0 0;
+    color: #888;
+    font-size: 0.76rem;
+    line-height: 1.6;
+  }
+
+  .module-quiz .quiz-exhausted {
+    padding: 2rem;
+    border: 1px solid #e8e8e8;
+    border-radius: 7px;
+  }
+
+  .module-quiz .quiz-exhausted h3 {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  .module-quiz .quiz-exhausted p {
+    color: #777;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .module-quiz .quiz-retake {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+    padding: 0.9rem 1.4rem;
+    border: 1px solid #647b69;
+    border-radius: 4px;
+    background: #647b69;
+    color: #fff;
+    font: inherit;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .module-quiz .quiz-retake:hover {
+    background: #506554;
+  }
+
+  .module-quiz .quiz-next-note {
+    margin: 0.7rem 0 0;
+    color: #777;
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .module-quiz {
+      padding-top: 2rem;
+    }
+
+    .module-quiz .quiz-question-card {
+      padding: 1.1rem;
+    }
+
+    .module-quiz .quiz-progress-heading {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .module-quiz .quiz-footer {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .module-quiz .quiz-submit {
+      width: 100%;
+    }
+
+    .module-quiz .result-summary {
+      padding: 1.4rem;
+    }
+  }
+</style>
