@@ -1,1 +1,712 @@
 
+---
+/**
+ * Waakhal Studies
+ * Module 01 – Introduction to Conservation
+ *
+ * Reusable quiz component.
+ * Current question bank: 10 academically reviewed questions.
+ * Additional questions can be added to QUESTION_BANK.
+ */
+const moduleId = "conservation-module-01";
+---
+
+<section
+  id="knowledge-check"
+  class="module-quiz"
+  data-module-id={moduleId}
+  aria-labelledby="quiz-title"
+>
+  <div class="quiz-heading">
+    <p class="quiz-eyebrow">08 / TEST YOUR KNOWLEDGE</p>
+    <h2 id="quiz-title">Check your understanding.</h2>
+    <p class="quiz-intro">
+      Answer 10 questions based on this lesson. Your score and explanations
+      will appear after you submit your answers.
+    </p>
+  </div>
+
+  <div class="quiz-status" data-status aria-live="polite">
+    <span class="quiz-status-label">YOUR PROGRESS</span>
+    <span data-progress>Preparing your questions…</span>
+  </div>
+
+  <form data-quiz-form>
+    <div data-questions></div>
+
+    <div class="quiz-actions">
+      <button class="quiz-submit" type="submit" data-submit disabled>
+        Submit answers
+      </button>
+    </div>
+  </form>
+
+  <div class="quiz-results" data-results hidden aria-live="polite"></div>
+</section>
+
+<script>
+  type QuizQuestion = {
+    id: string;
+    question: string;
+    options: string[];
+    answer: number;
+    explanation: string;
+    section: string;
+    difficulty: "Basic" | "Intermediate" | "Application";
+  };
+
+  const QUESTION_BANK: QuizQuestion[] = [
+    {
+      id: "m01-q01",
+      question: "What is the primary purpose of cultural heritage conservation?",
+      options: [
+        "To restore all damaged objects to their original appearance",
+        "To safeguard cultural heritage for present and future generations",
+        "To make heritage objects suitable for museum display",
+        "To replace deteriorated materials with modern alternatives"
+      ],
+      answer: 1,
+      explanation: "Conservation aims to safeguard cultural heritage while ensuring its accessibility to present and future generations.",
+      section: "02 – What is conservation?",
+      difficulty: "Basic"
+    },
+    {
+      id: "m01-q02",
+      question: "Which of the following best explains why cultural heritage is significant?",
+      options: [
+        "It provides material evidence of human creativity, knowledge, belief and social experience.",
+        "It primarily represents the economic value of historical objects.",
+        "It allows museums to display rare and expensive collections.",
+        "It provides examples of objects that can be restored."
+      ],
+      answer: 0,
+      explanation: "Cultural heritage carries historical, artistic, scientific, spiritual, social and cultural significance.",
+      section: "02 – What is conservation?",
+      difficulty: "Basic"
+    },
+    {
+      id: "m01-q03",
+      question: "Which activity is included within the broader practice of conservation?",
+      options: [
+        "Only repairing physically damaged objects",
+        "Only maintaining the appearance of objects",
+        "Preventive measures, examination, documentation, research and treatment",
+        "Replacing old materials with new materials"
+      ],
+      answer: 2,
+      explanation: "Conservation is broader than repair. It includes preventive measures, scientific examination, documentation, research, treatment and responsible management.",
+      section: "02 – What is conservation?",
+      difficulty: "Basic"
+    },
+    {
+      id: "m01-q04",
+      question: "Which of the following is an example of preventive conservation?",
+      options: [
+        "Retouching losses in a painting",
+        "Reassembling a broken sculpture",
+        "Consolidating a fragile painted surface",
+        "Improving storage and environmental management"
+      ],
+      answer: 3,
+      explanation: "Preventive conservation aims to avoid or minimise future deterioration through measures addressing the environment and circumstances surrounding objects and collections.",
+      section: "03 – Three approaches",
+      difficulty: "Basic"
+    },
+    {
+      id: "m01-q05",
+      question: "What distinguishes remedial conservation from preventive conservation?",
+      options: [
+        "Remedial conservation involves direct action to arrest active deterioration or strengthen an object.",
+        "Remedial conservation focuses exclusively on improving display conditions.",
+        "Remedial conservation is concerned only with historical research.",
+        "Remedial conservation involves changing the appearance of stable objects."
+      ],
+      answer: 0,
+      explanation: "Remedial conservation involves direct action when an object's condition is fragile or deteriorating rapidly. Preventive conservation generally addresses the surrounding environment and circumstances.",
+      section: "03 – Three approaches",
+      difficulty: "Intermediate"
+    },
+    {
+      id: "m01-q06",
+      question: "Restoration, as described in the lesson, is generally undertaken on an object that is:",
+      options: [
+        "Actively deteriorating and structurally unstable",
+        "Stable, but affected in its significance or function by past alteration or deterioration",
+        "Completely free from any damage",
+        "No longer considered culturally significant"
+      ],
+      answer: 1,
+      explanation: "Restoration involves direct action on a stable object to facilitate its appreciation, understanding or use when past alteration or deterioration has affected its significance or function.",
+      section: "03 – Three approaches",
+      difficulty: "Intermediate"
+    },
+    {
+      id: "m01-q07",
+      question: "Which of the following correctly classifies the materials discussed in the lesson?",
+      options: [
+        "Paper and stone are both organic materials.",
+        "Metals and textiles are both organic materials.",
+        "Wood and leather are organic materials, while stone and ceramics are inorganic materials.",
+        "Glass and photographs are both inorganic materials."
+      ],
+      answer: 2,
+      explanation: "The lesson identifies paper, textiles, wood, leather and photographs as organic materials, and stone, metals, ceramics and glass as inorganic materials.",
+      section: "04 – Scope of conservation",
+      difficulty: "Intermediate"
+    },
+    {
+      id: "m01-q08",
+      question: "Why do composite objects require particular consideration during conservation?",
+      options: [
+        "They are always more valuable than single-material objects.",
+        "They cannot be examined scientifically.",
+        "They must always receive the same treatment as inorganic materials.",
+        "Their different constituent materials may respond differently to environmental conditions and treatment."
+      ],
+      answer: 3,
+      explanation: "Composite objects contain combinations of materials that may respond differently to environmental conditions and treatment.",
+      section: "04 – Scope of conservation",
+      difficulty: "Intermediate"
+    },
+    {
+      id: "m01-q09",
+      question: "A conservator is considering treatment for a deteriorating object. Which consideration would be least appropriate as the sole basis for making that decision?",
+      options: [
+        "The significance and condition of the object",
+        "The possible benefits and risks of intervention",
+        "The desire to make the object look visually attractive",
+        "The causes and extent of deterioration"
+      ],
+      answer: 2,
+      explanation: "Conservation decisions require consideration of significance, material composition, condition, deterioration, risks, benefits, resources and future care. Visual attractiveness alone is not an adequate basis for treatment.",
+      section: "05 – Making conservation decisions",
+      difficulty: "Application"
+    },
+    {
+      id: "m01-q10",
+      question: "A museum object shows signs of deterioration, but the cause has not been established. What is the most appropriate initial response?",
+      options: [
+        "Begin treatment immediately to prevent further damage.",
+        "Examine the object, investigate the cause and consider possible preventive measures before deciding on treatment.",
+        "Replace the deteriorated material with a new material.",
+        "Restore the object's original appearance before carrying out documentation."
+      ],
+      answer: 1,
+      explanation: "The lesson emphasises investigation and reasoned decision-making before intervention. The cause of deterioration should be understood, and preventive measures and relevant expertise should be considered.",
+      section: "05 and 06 – Decision-making / Think and reflect",
+      difficulty: "Application"
+    }
+  ];
+
+  const root = document.querySelector<HTMLElement>(
+    ".module-quiz[data-module-id]"
+  );
+
+  if (root) {
+    const form = root.querySelector<HTMLFormElement>("[data-quiz-form]");
+    const questionContainer =
+      root.querySelector<HTMLElement>("[data-questions]");
+    const progress = root.querySelector<HTMLElement>("[data-progress]");
+    const submitButton =
+      root.querySelector<HTMLButtonElement>("[data-submit]");
+    const results = root.querySelector<HTMLElement>("[data-results]");
+
+    const storageKey =
+      `waakhal-quiz-${root.dataset.moduleId}-attempted`;
+
+    if (form && questionContainer && progress && submitButton && results) {
+      let attemptedIds: string[] = [];
+
+      try {
+        const saved = localStorage.getItem(storageKey);
+        attemptedIds = saved ? JSON.parse(saved) : [];
+
+        if (!Array.isArray(attemptedIds)) {
+          attemptedIds = [];
+        }
+      } catch {
+        attemptedIds = [];
+      }
+
+      const available = QUESTION_BANK.filter(
+        question => !attemptedIds.includes(question.id)
+      );
+
+      // Randomise the available questions.
+      const shuffled = [...available];
+
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+
+      // Select up to 10 questions for this attempt.
+      const selected = shuffled.slice(0, 10);
+
+      const escapeHtml = (value: string) =>
+        value.replace(/[&<>"']/g, char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        })[char] || char);
+
+      if (selected.length === 0) {
+        progress.textContent = "Question bank completed.";
+
+        questionContainer.innerHTML = `
+          <div class="quiz-exhausted">
+            <h3>You have completed this question bank.</h3>
+            <p>
+              You have attempted all ${QUESTION_BANK.length} questions
+              currently available for this lesson. New questions will
+              be added in a future update.
+            </p>
+          </div>
+        `;
+
+        submitButton.hidden = true;
+      } else {
+        progress.textContent =
+          `${selected.length} questions available · ` +
+          `${attemptedIds.length} previously attempted`;
+
+        questionContainer.innerHTML = selected.map((q, index) => `
+          <fieldset class="quiz-question">
+            <legend>
+              <span class="quiz-question-number">
+                QUESTION ${index + 1} OF ${selected.length}
+              </span>
+
+              <span class="quiz-question-text">
+                ${escapeHtml(q.question)}
+              </span>
+            </legend>
+
+            <div class="quiz-options">
+              ${q.options.map((option, optionIndex) => `
+                <label class="quiz-option">
+                  <input
+                    type="radio"
+                    name="${q.id}"
+                    value="${optionIndex}"
+                    required
+                  >
+
+                  <span class="quiz-option-letter">
+                    ${String.fromCharCode(65 + optionIndex)}
+                  </span>
+
+                  <span>${escapeHtml(option)}</span>
+                </label>
+              `).join("")}
+            </div>
+          </fieldset>
+        `).join("");
+
+        submitButton.disabled = false;
+      }
+
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        if (!selected.length || submitButton.disabled) {
+          return;
+        }
+
+        const unanswered = selected.filter(q =>
+          !form.querySelector<HTMLInputElement>(
+            `input[name="${q.id}"]:checked`
+          )
+        );
+
+        if (unanswered.length) {
+          const first = form.querySelector<HTMLInputElement>(
+            `input[name="${unanswered[0].id}"]`
+          );
+
+          first?.focus();
+
+          progress.textContent =
+            `Please answer all ${selected.length} questions before submitting.`;
+
+          return;
+        }
+
+        let score = 0;
+
+        const answerDetails = selected.map((q, index) => {
+          const chosen = form.querySelector<HTMLInputElement>(
+            `input[name="${q.id}"]:checked`
+          );
+
+          const chosenIndex = chosen ? Number(chosen.value) : -1;
+          const correct = chosenIndex === q.answer;
+
+          if (correct) {
+            score++;
+          }
+
+          return {
+            q,
+            index,
+            chosenIndex,
+            correct
+          };
+        });
+
+        // Record every attempted question, whether answered correctly or not.
+        attemptedIds = [
+          ...new Set([
+            ...attemptedIds,
+            ...selected.map(q => q.id)
+          ])
+        ];
+
+        try {
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify(attemptedIds)
+          );
+        } catch {
+          // The quiz remains usable if browser storage is unavailable.
+        }
+
+        const percentage = Math.round(
+          (score / selected.length) * 100
+        );
+
+        const feedback = score >= 9
+          ? "Excellent understanding."
+          : score >= 7
+            ? "Good work. Review the explanations to strengthen your understanding."
+            : score >= 5
+              ? "You're developing your understanding. Revisit the relevant lesson sections."
+              : "Consider revisiting the chapter before your next attempt.";
+
+        results.hidden = false;
+
+        results.innerHTML = `
+          <div class="quiz-score">
+            <p class="quiz-eyebrow">YOUR RESULT</p>
+
+            <p class="quiz-score-number">
+              ${score} <span>/ ${selected.length}</span>
+            </p>
+
+            <p class="quiz-percentage">${percentage}% correct</p>
+
+            <h3>${feedback}</h3>
+
+            <p>
+              ${selected.length - score}
+              question${selected.length - score === 1 ? "" : "s"}
+              answered incorrectly.
+            </p>
+          </div>
+
+          <div class="quiz-review">
+            <h3>Answer review</h3>
+
+            ${answerDetails.map(({ q, index, chosenIndex, correct }) => `
+              <article class="quiz-review-item">
+                <p class="quiz-review-result ${correct ? "is-correct" : "is-incorrect"}">
+                  ${correct ? "Correct" : "Incorrect"} · Question ${index + 1}
+                </p>
+
+                <h4>${escapeHtml(q.question)}</h4>
+
+                <p>
+                  <strong>Your answer:</strong>
+                  ${escapeHtml(q.options[chosenIndex])}
+                </p>
+
+                ${correct ? "" : `
+                  <p>
+                    <strong>Correct answer:</strong>
+                    ${escapeHtml(q.options[q.answer])}
+                  </p>
+                `}
+
+                <p>${escapeHtml(q.explanation)}</p>
+
+                <p class="quiz-review-section">
+                  Lesson reference: ${escapeHtml(q.section)}
+                </p>
+              </article>
+            `).join("")}
+          </div>
+
+          <p class="quiz-bank-progress">
+            ${attemptedIds.length} of ${QUESTION_BANK.length}
+            available questions attempted.
+          </p>
+        `;
+
+        form.querySelectorAll<HTMLInputElement>("input").forEach(input => {
+          input.disabled = true;
+        });
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Attempt submitted";
+
+        results.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+        progress.textContent =
+          "Attempt completed. Your answers have been recorded in this browser.";
+      });
+    }
+  }
+</script>
+
+<style>
+  .module-quiz {
+    padding: 2rem 0 3.5rem;
+    margin: 0 0 3rem;
+    border-bottom: 1px solid #e8e8e8;
+    scroll-margin-top: 2rem;
+  }
+
+  .quiz-heading {
+    max-width: 650px;
+    margin-bottom: 2rem;
+  }
+
+  .quiz-eyebrow,
+  .quiz-status-label,
+  .quiz-question-number {
+    color: #858585;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  .quiz-heading h2 {
+    font-size: clamp(1.8rem, 3vw, 2.3rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 1.3;
+    margin: 0.7rem 0 1rem;
+  }
+
+  .quiz-intro {
+    color: #707070;
+    font-size: 0.95rem;
+    line-height: 1.85;
+  }
+
+  .quiz-status {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+    color: #707070;
+    font-size: 0.85rem;
+  }
+
+  .quiz-question {
+    min-width: 0;
+    padding: 1.5rem 0 1.8rem;
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .quiz-question legend {
+    display: block;
+    width: 100%;
+    padding: 0;
+  }
+
+  .quiz-question-number {
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .quiz-question-text {
+    display: block;
+    color: #292929;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .quiz-options {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: 1.1rem;
+  }
+
+  .quiz-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    color: #707070;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .quiz-option:hover {
+    border-color: #9aaa94;
+    background: #fafbf9;
+  }
+
+  .quiz-option:has(input:checked) {
+    border-color: #647b69;
+    background: #f5f7f4;
+    color: #303830;
+  }
+
+  .quiz-option input {
+    margin-top: 0.28rem;
+    accent-color: #647b69;
+    flex: 0 0 auto;
+  }
+
+  .quiz-option-letter {
+    color: #8a9b80;
+    font-size: 0.78rem;
+    font-weight: 600;
+    min-width: 1rem;
+  }
+
+  .quiz-actions {
+    padding-top: 1.5rem;
+  }
+
+  .quiz-submit {
+    padding: 0.85rem 1.4rem;
+    border: 0;
+    border-radius: 3px;
+    background: #647b69;
+    color: white;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .quiz-submit:hover:not(:disabled) {
+    background: #506554;
+  }
+
+  .quiz-submit:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .quiz-results {
+    margin-top: 2rem;
+  }
+
+  .quiz-score {
+    padding: 1.5rem;
+    background: #f7f8f6;
+    margin-bottom: 2rem;
+  }
+
+  .quiz-score-number {
+    margin: 0.4rem 0 0;
+    color: #303830;
+    font-size: 3rem;
+    line-height: 1.1;
+    letter-spacing: -0.06em;
+  }
+
+  .quiz-score-number span {
+    color: #858585;
+    font-size: 1.4rem;
+  }
+
+  .quiz-percentage {
+    color: #647b69;
+    font-weight: 600;
+  }
+
+  .quiz-score h3,
+  .quiz-review h3 {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .quiz-score p:last-child,
+  .quiz-review-item p {
+    color: #707070;
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+
+  .quiz-review-item {
+    padding: 1.2rem 0;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .quiz-review-item h4 {
+    margin: 0.4rem 0 0.8rem;
+    font-size: 0.98rem;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .quiz-review-item p {
+    margin: 0.4rem 0;
+  }
+
+  .quiz-review-result {
+    font-size: 0.75rem !important;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .quiz-review-result.is-correct {
+    color: #47734d;
+  }
+
+  .quiz-review-result.is-incorrect {
+    color: #a45a4f;
+  }
+
+  .quiz-review-section,
+  .quiz-bank-progress {
+    color: #858585 !important;
+    font-size: 0.78rem !important;
+  }
+
+  .quiz-exhausted {
+    padding: 1.5rem;
+    border: 1px solid #e8e8e8;
+  }
+
+  .quiz-exhausted h3 {
+    margin-top: 0;
+    font-weight: 500;
+  }
+
+  .quiz-exhausted p {
+    color: #707070;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 480px) {
+    .quiz-status {
+      flex-direction: column;
+    }
+
+    .quiz-option {
+      padding: 0.75rem;
+    }
+  }
+</style>
+
