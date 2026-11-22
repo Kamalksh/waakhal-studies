@@ -2,6 +2,7 @@
 ---
 import BaseLayout from "../../components/layout/BaseLayout.astro";
 import Container from "../../components/ui/Container.astro";
+import ModuleQuiz from "../../components/quiz/ModuleQuiz.astro";
 ---
 
 <BaseLayout
@@ -38,6 +39,7 @@ import Container from "../../components/ui/Container.astro";
             <a href="#decision-making">Making decisions</a>
             <a href="#reflection">Think and reflect</a>
             <a href="#references">Further reading</a>
+            <a href="#knowledge-check">Test your knowledge</a>
           </nav>
         </aside>
 
@@ -381,6 +383,8 @@ import Container from "../../components/ui/Container.astro";
               </a>
             </div>
           </section>
+
+          <ModuleQuiz />
 
           <nav class="lesson-navigation">
             <a href="/conservation/">← Back to Conservation</a>
